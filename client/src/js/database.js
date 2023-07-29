@@ -12,30 +12,33 @@ const initdb = async () =>
     },
   });
 
-export const putDb = async (content) => {
-  console.log('Put to the database');
+  export const putDb = async (content) => {
+    console.log("Put to the database");
 
-  const jateDb = await openDB('jate', 1);
-  const tx = jateDb.transaction('jate', 'readwrite');
-  const store = tx.objectStore('jate');
-  const request = store.put({ id: 1, value: content });
+  const jateDb = await openDB("jate", 1);//in this line we will open the "jate" IndexedDb, await will stop the code untill the result 
+  //returns. the result will then be stored in "jateDb" 
+  const tx = jateDb.transaction("jate", "readwrite");//in this line we will start a new read/write transaction on the "jate" object.
+  //the transaction will the be stores in the "tx" constant
+  const store = tx.objectStore("jate");//in this line we access the stored "object" and assign it to const store
+  const request = store.put({ id: 1, value: content });//this line will put the value of id:1 into the saved object 
+  console.log(request);
 
   const result = await request;
-  console.log('Data saved to the database', result);
+  console.log("data saved to the database", result);
   return result?.value;
-};
+  }
 
+
+// TODO: Add logic for a method that gets all the content from the database
+//the following function will allow the opining of the jate database and retrieve all associated record 
 export const getDb = async () => {
-  console.log('GET from the database');
+  console.log("GET from the database");
 
-  const jateDb = await openDB('jate', 1);
-  const tx = jateDb.transaction('jate', 'readonly');
-  const store = tx.objectStore('jate');
-  const request = store.get(1); // Replace '1' with the actual key you want to retrieve
-
-  const result = await request;
-  console.log('Data retrieved from the database:', result);
-  return result;
-};
+  const jateDb = await openDB("jate", 1);//this line will allow the opening of "jate" the await keyword means the code will
+  //pause untill the database has been opened. the number 1 refers to the version of the object "jate"
+  const tx = jateDb.transaction("jate", "readonly");//this line will open a transaction of "jate" in read only
+  const store = tx.objectStore("jate");
+  const request = store.getAll();
+}
 
 initdb();
